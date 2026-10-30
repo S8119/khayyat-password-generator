@@ -17,8 +17,6 @@ class PasswordRequestHandlerTest
     void handleRequestReturnsGeneratedPassword()
     {
         // given
-        Gson gson = new Gson();
-        PasswordGenerator generator = new PasswordGenerator(new Random(8));
         PasswordRequest request = new PasswordRequest(
                 12, true, true, true, "!@#".toCharArray());
 
@@ -28,8 +26,11 @@ class PasswordRequestHandlerTest
         http.setMethod("POST");
         requestContext.setHttp(http);
         event.setRequestContext(requestContext);
+
+        Gson gson = new Gson();
         event.setBody(gson.toJson(request));
 
+        PasswordGenerator generator = new PasswordGenerator(new Random(8));
         PasswordRequestHandler handler = new PasswordRequestHandler(gson, generator);
 
         // when
