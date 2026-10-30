@@ -45,8 +45,7 @@ public class PasswordRequestHandler
             apiResponse.setStatusCode(200);
             apiResponse.setBody(responseJson);
             return apiResponse;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             return toResponseEvent(e);

@@ -42,8 +42,7 @@ public class PasswordGeneratorController
         try
         {
             numChars = Integer.parseInt(lengthField.getText().trim());
-        }
-        catch (NumberFormatException e)
+        } catch (NumberFormatException e)
         {
             errorLabel.setText("Enter a whole number for length.");
             return;
@@ -72,8 +71,7 @@ public class PasswordGeneratorController
         {
             PasswordResponse response = passwordGenerator.generate(request);
             passwordField.setText(response.password());
-        }
-        catch (IllegalArgumentException e)
+        } catch (IllegalArgumentException e)
         {
             errorLabel.setText(e.getMessage());
         }

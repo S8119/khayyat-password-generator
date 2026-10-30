@@ -19,7 +19,6 @@ class PasswordRequestHandlerTest
         // given
         Gson gson = new Gson();
         PasswordGenerator generator = new PasswordGenerator(new Random(8));
-        PasswordRequestHandler handler = new PasswordRequestHandler(gson, generator);
         PasswordRequest request = new PasswordRequest(
                 12, true, true, true, "!@#".toCharArray());
 
@@ -30,6 +29,8 @@ class PasswordRequestHandlerTest
         requestContext.setHttp(http);
         event.setRequestContext(requestContext);
         event.setBody(gson.toJson(request));
+
+        PasswordRequestHandler handler = new PasswordRequestHandler(gson, generator);
 
         // when
         APIGatewayV2HTTPResponse apiResponse = handler.handleRequest(event, null);
@@ -45,7 +46,6 @@ class PasswordRequestHandlerTest
     void handleRequestReturns500WhenBodyIsInvalid()
     {
         // given
-        PasswordRequestHandler handler = new PasswordRequestHandler();
         APIGatewayV2HTTPEvent event = new APIGatewayV2HTTPEvent();
         APIGatewayV2HTTPEvent.RequestContext requestContext = new APIGatewayV2HTTPEvent.RequestContext();
         APIGatewayV2HTTPEvent.RequestContext.Http http = new APIGatewayV2HTTPEvent.RequestContext.Http();
@@ -53,6 +53,8 @@ class PasswordRequestHandlerTest
         requestContext.setHttp(http);
         event.setRequestContext(requestContext);
         event.setBody("not-json");
+
+        PasswordRequestHandler handler = new PasswordRequestHandler();
 
         // when
         APIGatewayV2HTTPResponse apiResponse = handler.handleRequest(event, null);
