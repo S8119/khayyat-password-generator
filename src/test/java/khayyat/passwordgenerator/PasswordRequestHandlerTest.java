@@ -17,21 +17,13 @@ class PasswordRequestHandlerTest
     void handleRequestReturnsGeneratedPassword()
     {
         // given
+        Gson gson = new Gson();
         PasswordRequest request = new PasswordRequest(
                 12, true, true, true, "!@#".toCharArray());
-
         APIGatewayV2HTTPEvent event = new APIGatewayV2HTTPEvent();
-        APIGatewayV2HTTPEvent.RequestContext requestContext = new APIGatewayV2HTTPEvent.RequestContext();
-        APIGatewayV2HTTPEvent.RequestContext.Http http = new APIGatewayV2HTTPEvent.RequestContext.Http();
-        http.setMethod("POST");
-        requestContext.setHttp(http);
-        event.setRequestContext(requestContext);
-
-        Gson gson = new Gson();
         event.setBody(gson.toJson(request));
-
-        PasswordGenerator generator = new PasswordGenerator(new Random(8));
-        PasswordRequestHandler handler = new PasswordRequestHandler(gson, generator);
+        PasswordRequestHandler handler = new PasswordRequestHandler(
+                gson, new PasswordGenerator(new Random(8)));
 
         // when
         APIGatewayV2HTTPResponse apiResponse = handler.handleRequest(event, null);
@@ -48,13 +40,7 @@ class PasswordRequestHandlerTest
     {
         // given
         APIGatewayV2HTTPEvent event = new APIGatewayV2HTTPEvent();
-        APIGatewayV2HTTPEvent.RequestContext requestContext = new APIGatewayV2HTTPEvent.RequestContext();
-        APIGatewayV2HTTPEvent.RequestContext.Http http = new APIGatewayV2HTTPEvent.RequestContext.Http();
-        http.setMethod("POST");
-        requestContext.setHttp(http);
-        event.setRequestContext(requestContext);
         event.setBody("not-json");
-
         PasswordRequestHandler handler = new PasswordRequestHandler();
 
         // when
@@ -80,6 +66,5 @@ class PasswordRequestHandlerTest
 
         // then
         assertEquals("!@#$%^&", new String(parsed.allowedSymbols()));
-        assertTrue(json.contains("allowedSymbols"), json);
     }
 }

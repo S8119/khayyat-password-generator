@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -58,8 +57,6 @@ class PasswordGeneratorTest
         // then
         assertEquals(20, password.length());
         assertTrue(password.matches("[a-z]+"));
-        assertFalse(containsAny(password, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-        assertFalse(containsAny(password, "0123456789"));
     }
 
     @Test
