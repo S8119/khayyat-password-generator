@@ -1,0 +1,7 @@
+{
+  "numChars": 20,
+  "includeUppercase": true,
+  "includeLowercase": true,
+  "includeNumbers": true,
+  "allowedSymbols": ["!", "@", "#", "$", "%", "^", "&"]
+}
