@@ -1,0 +1,70 @@
+package khayyat.passwordgenerator;
+
+import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse;
+import com.google.gson.Gson;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class PasswordRequestHandlerTest
+{
+    @Test
+    void handleRequestReturnsGeneratedPassword()
+    {
+        // given
+        Gson gson = new Gson();
+        PasswordRequest request = new PasswordRequest(
+                12, true, true, true, "!@#".toCharArray());
+        APIGatewayV2HTTPEvent event = new APIGatewayV2HTTPEvent();
+        event.setBody(gson.toJson(request));
+        PasswordRequestHandler handler = new PasswordRequestHandler(
+                gson, new PasswordGenerator(new Random(8)));
+
+        // when
+        APIGatewayV2HTTPResponse apiResponse = handler.handleRequest(event, null);
+
+        // then
+        assertEquals(200, apiResponse.getStatusCode());
+        PasswordResponse response = gson.fromJson(apiResponse.getBody(), PasswordResponse.class);
+        assertNotNull(response.password());
+        assertEquals(12, response.password().length());
+    }
+
+    @Test
+    void handleRequestReturns500WhenBodyIsInvalid()
+    {
+        // given
+        APIGatewayV2HTTPEvent event = new APIGatewayV2HTTPEvent();
+        event.setBody("not-json");
+        PasswordRequestHandler handler = new PasswordRequestHandler();
+
+        // when
+        APIGatewayV2HTTPResponse apiResponse = handler.handleRequest(event, null);
+
+        // then
+        assertEquals(500, apiResponse.getStatusCode());
+        assertTrue(apiResponse.getBody().contains("Exception")
+                || apiResponse.getBody().contains("Json"));
+    }
+
+    @Test
+    void gsonRoundTripKeepsAllowedSymbols()
+    {
+        // given
+        Gson gson = new Gson();
+        PasswordRequest request = new PasswordRequest(
+                16, true, true, true, "!@#$%^&".toCharArray());
+
+        // when
+        String json = gson.toJson(request);
+        PasswordRequest parsed = gson.fromJson(json, PasswordRequest.class);
+
+        // then
+        assertEquals("!@#$%^&", new String(parsed.allowedSymbols()));
+    }
+}
