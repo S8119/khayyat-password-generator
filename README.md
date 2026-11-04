@@ -4,6 +4,15 @@ Program to generate a random password from options entered by the user.
 The user chooses the password length and whether to include uppercase letters, lowercase letters, numbers, and which symbols.
 The generated password is then displayed in the UI.
 
+
+Sample curl request used to test:
+```
+curl.exe --ssl-no-revoke -s -X POST `
+  -H "Content-Type: application/json" `
+  -d "@request.json" `
+  "https://t5g5kmmrbinnei3pyiv4sps5ka0znexd.lambda-url.us-east-2.on.aws/"
+```
+
 ### Screenshots
 
 ![GUI displaying a generated password](screenshot.png)
